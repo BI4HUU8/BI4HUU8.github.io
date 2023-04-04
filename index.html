@@ -126,7 +126,7 @@
             <div>Призначення "Турель-пульт" - доповнита "нульову лінію" дешевою зброєю яка дозволить вести стрільбу по наступаючій піхоті з більш безбечного місця.</div>
             <div>Призначення "Турель-старлiнк" - проникати в тил противника і роздавати wi-fi для 10 озброєнних турелей декілька з тепловізором, якими керуватимуть онлайн військові "танкісти"(хто грав в ігру про танки).</div>
             <div>Пульт складається: акамулятор, планшет, джойстик.</div>
-            <div class="anim">
+            <div class="anim" id="video">
                 <img src="1.jpg" id="t1">
                 <img src="2.jpg" id="t2">
                 <img src="3.jpg" id="t3">
@@ -138,20 +138,26 @@
                 <img src="9.jpg" id="t9">
                 <img src="10.jpg" id="t10">
                 <img src="11.jpg" id="t11">
+                <img src="12.jpg" id="t12">
             </div>
+            <h2>Старі моделі</h2>
+            <img src="Турель М1.png" alt=""></img>
+            <img src="Турель М2.png" alt=""></img>
+            <img src="Турель М3.png" alt=""></img>
+            <h2>Креслення нової моделі</h2>
             <img src="21.jpg" alt=""></img>
             <img src="22.jpg" alt=""></img>
             <img src="23.jpg" alt=""></img>
             <img src="24.jpg" alt=""></img>
             <script>
-                    var index = 11;
+                    var index = 12;
                     setInterval(() => {
-                        for (var index2 = 1; index2 < 12; index2++) {
+                        for (var index2 = 1; index2 < 13; index2++) {
                             document.getElementById("t" + index2).style.display = "none";
                         }
                         document.getElementById("t" + index).style.display = "block";
                         index--;
-                        if (index == 0) {index = 11;}
+                        if (index == 0) {index = 12;}
                     }, 1000);
 
             </script>
