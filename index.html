@@ -1,315 +1,475 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна сторінка</title>
     <style>
+        :root {
+            color-scheme: light;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #25211f;
+            background: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 100%;
+            min-height: 100%;
+        }
+
         body {
-            font-family: "Gost Type BU";
-            font-size: 18px;
-            background-color: #eeeeee;
+            width: 100%;
+            min-height: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
         }
-        
-        nav div:hover {
-            cursor: pointer;
+
+        h1, h2, h3, h4, h5, h6 {
+              text-align: center;
         }
-        
-        nav div {
-            background-color: rgba(231, 245, 170, 0.5);
-            border-radius: 8px;
-            border: 1px solid #888;
-            padding: 5px 12px;
-            margin: 8px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+
+        .product-grid {
+            margin: 0 0 48px;
+            padding: 0 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 28px 20px;
         }
-        
-        nav {
+
+        .product-card {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .product-card__images {
+            position: relative;
+            display: block;
+            overflow: hidden;
+            aspect-ratio: 3 / 4;
+            background: #f5f1ef;
+        }
+
+        .product-card__image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 200ms ease;
+        }
+
+        .product-card__image--hover {
+            opacity: 0;
+        }
+
+        .product-card:hover .product-card__image--hover,
+        .product-card:focus-visible .product-card__image--hover {
+            opacity: 1;
+        }
+
+        .product-card__name,
+        .product-card__meta {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .product-card__name {
+            font-weight: 600;
+        }
+
+        .product-card__meta {
             display: flex;
-            /* margin-bottom: 10px; */
-            font-size: 22px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
         }
-        
-        .nav_top div {
-            background-color: rgba(0, 38, 252, 0.3);
-            border: 3px line rgba(0, 38, 252, 0.302);
-            border: 3px line red;
+
+        .product-card__price,
+        .product-card__art {
+            color: #6b625e;
         }
-        
-        .nav_top div:hover {
+
+        .product-card__art {
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            text-transform: lowercase;
+        }
+
+        .product-page {
+            margin: 0;
+            padding: 28px 32px 64px;
+        }
+
+        .product-page__back {
+            color: #6b625e;
+            text-decoration: none;
+        }
+
+        .product-page h1 {
+            margin: 24px 0;
+        }
+
+        .product-page__layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+            gap: 48px;
+        }
+
+        .product-slider {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .product-slider > input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .product-slider__main {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3 / 4;
+            background: #f5f1ef;
+        }
+
+        .product-slider__slide {
+            display: none;
+            position: absolute;
+            inset: 0;
+        }
+
+        .product-slider__slide > a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: zoom-in;
+        }
+
+        .product-slider__slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-slider > input:nth-of-type(1):checked ~ .product-slider__main .product-slider__slide--first,
+        .product-slider > input:nth-of-type(2):checked ~ .product-slider__main .product-slider__slide--second {
+            display: block;
+        }
+
+        .product-slider__arrow,
+        .product-fullscreen__arrow {
+            display: grid;
+            place-items: center;
+            width: 60px;
+            height: 60px;
+            padding-bottom: 5px;
+            border-radius: 50%;
+            color: #25211f;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 40px;
+            line-height: 1;
+            text-decoration: none;
             cursor: pointer;
-            border-color: gold;
+            user-select: none;
         }
-        
-        .nav_top {
+
+        .product-slider__arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .product-slider__arrow--previous,
+        .product-fullscreen__arrow--previous {
+            left: 14px;
+        }
+
+        .product-slider__arrow--next,
+        .product-fullscreen__arrow--next {
+            right: 14px;
+        }
+
+        .product-fullscreen {
+            display: none;
+        }
+
+        .product-fullscreen:target {
             position: fixed;
-            top: 0px;
-            background-color: #eeeeee;
-            font-size: 28px;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+            background: rgba(0, 0, 0, 0.94);
         }
-        
-        section {
-            margin-top: 65px;
+
+        .product-fullscreen > img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
-        
-        h4 {
-            margin-bottom: 8px;
+
+        .product-fullscreen__close {
+            position: absolute;
+            top: 18px;
+            right: 24px;
+            color: #fff;
+            font-size: 36px;
+            line-height: 1;
+            text-decoration: none;
         }
-        img {
-            width: 100%
+
+        .product-fullscreen__arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
         }
-        h2, h1 {
-            text-align: center;
+
+        .product-slider__thumbnails {
+            display: flex;
+            gap: 10px;
+        }
+
+        .product-slider__thumbnails label {
+            width: 72px;
+            height: 96px;
+            cursor: pointer;
+            opacity: 0.65;
+        }
+
+        .product-slider__thumbnails label:hover,
+        .product-slider > input:nth-of-type(1):checked ~ .product-slider__thumbnails label:nth-of-type(1),
+        .product-slider > input:nth-of-type(2):checked ~ .product-slider__thumbnails label:nth-of-type(2) {
+            opacity: 1;
+        }
+
+        .product-slider__thumbnails img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-page__price {
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .product-page__art {
+            color: #6b625e;
+        }
+
+        .site-header {
+            border-bottom: 1px solid #eee8e5;
+            background: #fff;
+        }
+
+        .header-inner {
+            padding: 22px 32px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .brand {
+            justify-self: start;
+            color: inherit;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-decoration: none;
+        }
+
+        .category-nav,
+        .info-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .category-nav {
+            justify-self: center;
+        }
+
+        .info-nav {
+            justify-self: end;
+            gap: 18px;
+        }
+
+        .site-header a:not(.brand) {
+            color: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 160ms ease;
+        }
+
+        .site-header a:hover {
+            color: #a45c68;
+        }
+
+        .category-nav a {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        @media (max-width: 900px) {
+            .header-inner {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .brand {
+                grid-column: 1 / -1;
+                justify-self: center;
+            }
+
+            .category-nav {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                justify-self: center;
+                order: 1;
+            }
+
+            .info-nav {
+                grid-column: 1 / -1;
+                grid-row: 3;
+                justify-self: center;
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .product-grid {
+                padding: 0 18px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 22px 12px;
+            }
+
+            .header-inner {
+                padding: 20px 18px;
+                gap: 18px 12px;
+            }
+
+            .brand {
+                font-size: 23px;
+            }
+
+            .category-nav,
+            .info-nav {
+                gap: 12px 18px;
+                flex-wrap: wrap;
+            }
+
+            .site-header a:not(.brand) {
+                font-size: 12px;
+            }
+
+            .product-page {
+                padding: 24px 18px 48px;
+            }
+
+            .product-page__layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
         }
     </style>
-    <title>Нова Україна</title>
 </head>
-
 <body>
-    <nav class="nav_top">
-        <div onclick="show(1)">Вiйськова техніка</div>
-        <div onclick="show(2)">Новини</div>
-        <div onclick="show(3)">Пiдтримати</div>
-    </nav>
-
-    <section id="sect_war">
-        <nav>
-            <div onclick="show(5)">Турель</div>
-            <div onclick="show(6)">Дрон</div>
-            <div onclick="show(7)">Танк</div>
-            <div onclick="show(9)">Корабель</div>
-            <div onclick="show(8)">Машинка</div>
-            <div onclick="show(10)">Детонатор</div>
-            <div onclick="show(11)">СОШ</div>
-        </nav>
-        <div id="sect_turel">
-            <H2>Турель-пульт</H2>
-            <!-- <img src="" alt="Турель-пульт"> -->
-            <h3>Характеристики</h3>
-            <h4>Вiдстань керування:</h4>
-            <div>Провiд 50 - 300 метрiв.</div>
-            <h4>Мобiльнiсть:</h4>
-            <div>V1* стацiонарна.</div>
-            <div>V2* опускається в схованку.</div>
-            <div>V3* вперед, назад, лiво, право.</div>
-            <h4>Захищенiсть:</h4>
-            <div>V*1 - незахищена.</div>
-            <div>V*2 - легко захищена.</div>
-            <div>V*3 - сильно захищена.</div>
-            <h4>Дальнiсть враження цiлi (рекомендована):</h4>
-            <div>V*1 30 - 50 метрiв.</div>
-            <div>V*2 35 - 55 метрiв.</div>
-            <div>V*3 40 - 60 метрiв.</div>
-            <h4>Озброення:</h4>
-            <div>V*1 автомат укорочений + РПГ.</div>
-            <div>V*2 автомат + РПГ.</div>
-            <div>V*3 автомат + РПГ .</div>
-
-            <H2>Турель-старлiнк</H2>
-            <!-- <img src="" alt="Турель-пульт"> -->
-            <h3>Характеристики</h3>
-            <h4>Вiдстань керування:</h4>
-            <div>Iнтернет 10 000 кiлометрiв.</div>
-            <h4>Мобiльнiсть:</h4>
-            <div>V3* вперед, назад, лiво, право.</div>
-            <h4>Захищенiсть:</h4>
-            <div>V*1 - незахищена.</div>
-            <h4>Дальнiсть враження цiлi (рекомендована):</h4>
-            <div>V*1 - 30 - 50 метрiв.</div>
-            <h4>Озброєння:</h4>
-            <div>V*1 - автомат.</div>
-            <h4>...</h4>
-            <div>Турель V1* (пульт) найдешевша $500 (ціна без зброї) +$500 пульт, не може маневрувати тому має бути добре замаскована.</div>
-            <div>Турель V2* (пульт) $550 (ціна без зброї) +$500 пульт, має можливість під час арт обстрілу ховатись у власний окоп.</div>
-            <div>Турель V3* (пульт) $600 (ціна без зброї) +$500 пульт, має можливість під час арт обстрілу ховатись у власний окоп і повноцінно їздити до 300м.</div>
-            <div>Рекомендується комплект: на 1 пульт - 3-5 турелей.</div>
-            <div>Турель V*2 (пульт) +$50 модифікація яка має легку броню і усилений привід, це також збільшує кучність стрільби.</div>
-            <div>Турель V*3 (пульт) +$100 модифікація яка має нормальну броню і значно усилений привід, це також збільшує кучність стрільби.</div>
-            <div>Призначення "Турель-пульт" - доповнита "нульову лінію" дешевою зброєю яка дозволить вести стрільбу по наступаючій піхоті з більш безбечного місця.</div>
-            <div>Призначення "Турель-старлiнк" - проникати в тил противника і роздавати wi-fi для 10 озброєнних турелей декілька з тепловізором, якими керуватимуть онлайн військові "танкісти"(хто грав в ігру про танки).</div>
-            <div>Пульт складається: акамулятор, планшет, джойстик.</div>
-            
-            <h1>Модифікація: "горизонт".</h1>
-            <div class="anim">
-                <img src="1.jpg" id="t1">
-                <img src="2.jpg" id="t2">
-                <img src="3.jpg" id="t3">
-                <img src="4.jpg" id="t4">
-                <img src="5.jpg" id="t5">
-                <img src="6.jpg" id="t6">
-                <img src="7.jpg" id="t7">
-                <img src="8.jpg" id="t8">
-                <img src="9.jpg" id="t9">
-                <img src="10.jpg" id="t10">
-                <img src="11.jpg" id="t11">
-<!--                 <img src="12.jpg" id="t12"> -->
-            </div>
-            
-            <h1>Модифікація звичайна.</h1>
-            <div class="anim_">
-                <img src="20.jpg" id="h1">
-                <img src="21.jpg" id="h2">
-                <img src="22.jpg" id="h3">
-                <img src="23.jpg" id="h4">
-                <img src="24.jpg" id="h5">
-                <img src="25.jpg" id="h6">
-                <img src="26.jpg" id="h7">
-            </div>
-            <h1>Креслення нової моделі</h1>
-            <img src="30.jpg" alt=""></img>
-            <img src="31.jpg" alt=""></img>
-            <img src="32.jpg" alt=""></img>
-            <img src="33.jpg" alt=""></img>
-            <h1>Старі моделі</h1>
-            <img src="Турель М1.png" alt=""></img>
-            <img src="Турель М2.png" alt=""></img>
-            <img src="Турель М3.png" alt=""></img>
-             <script>
-                    var index = 11;
-                    setInterval(() => {
-                        for (var index2 = 1; index2 < 12; index2++) {
-                            document.getElementById("t" + index2).style.display = "none";
-                        }
-                            console.log("t" + index)
-                        document.getElementById("t" + index).style.display = "block";
-                        index--;
-                        if (index == 0) {index = 11;}
-                    }, 1000);
-            </script>
-<!--             <script>
-                    var index3 = 7;
-                    setInterval(() => {
-                        for (var index32 = 1; index32 < 7; index32++) {
-                            document.getElementById("h" + index32).style.display = "none";
-                        }
-                        document.getElementById("h" + index).style.display = "block";
-                        index--;
-                        if (index3 == 0) {index3 = 7;}
-                    }, 1000);
-            </script>  -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="index.html" aria-label="Bikini — на головну">BIKINI</a>
+            <nav class="category-nav" aria-label="Категорії товарів">
+                <a href="women.html">Жінкам</a>
+                <a href="children.html">Дітям</a>
+            </nav>
+            <nav class="info-nav" aria-label="Інформація">
+                <a href="#about">Про нас</a>
+                <a href="#delivery">Доставка</a>
+                <a href="#payment">Оплата</a>
+                <a href="#contacts">Контакти</a>
+                <a href="#sale">Акції</a>
+            </nav>
         </div>
-
-
-        <div id="sect_drone">
-            <h2>Байрактар-фейк</h2>
-            <div>"Кусок" пiнопласта у формi "байрактар ТБ-2" вартiстю $100 розмiстити на аеропортi неподалiк фронту...</div>
-
-            <h2>Байрактар-фейк 2</h2>
-            <div>Лiтальний апарат схожий на "байрактар ТБ-2" вартiстю $1 000 який зможе пiднятись на висоту 7км i долетiти до ворожоi ПВО. Класно буде коли вони відчитаються що збили 1 000 байрактарів)))</div>
-            <h2>Байрактар-провідник</h2>
-            <div>Лiтальний апарат схожий на "байрактар ТБ-2" вартiстю $2 000 - $3 000 який буде літати рядом з бойовим дорогим дроном.</div>
-            <h2>Дрон-розвідник</h2>
-            <div>Лiтальний апарат схожий на "байрактар ТБ-2" вартiстю $3 000 який буде літати нагло над ворогом і наводити артилерію, а також рядом з бойовим дорогим дроном.</div>
-            <h2>Дрон-бомбардировщик</h2>
-            <div>Лiтальний апарат схожий на "байрактар ТБ-2" вартiстю $4 000 - $6 000 який буде літати нагло над ворогом і скидать 1 міну, прямо в ціль навряд - зато простимулює тратить дорогу ракету ПВО.</div>
-
-        </div>
-
-        <div id="sect_tank">
-            <h2>Танк-фейк</h2>
-            <div>"Кусок" пiнопласта у формi "Т-72" вартiстю $100 - $200 розмiстити в лісо-смузі неподалiк фронту...</div>
-            <h2>Танк-фейк мотор</h2>
-            <div>"Кусок" пiнопласта з б.у мотором від автомобіля у формi "Т-72" вартiстю $1 000 - $2 000 з дистанційним керуванням до 1 км буде їхати попереду колони і впитувати ворожі птури і міни...</div>
-
-            <h2>Танк-міні</h2>
-            <div>Маленький одномісний танк, яким можна керувати віддаленно, танкіст потрібен на випадок втрати віддаленого звязку.</div>
-
-        </div>
-
-        <div id="sect_kor">
-            <h2>Корабель підводний камікадзе</h2>
-            <div>Простий і дешевий підводний плав-засіб з надводною камерою і інтернетом старлінк $3 000 - $4 000 який доставить 20кг тротилу до кораблика-геноцидника, або понтонної переправи...</div>
-            <h2>Корабель підводний камікадзе-2</h2>
-            <div>Простий і дешевий підводний плав-засіб з надводною камерою і інтернетом старлінк $4 000 - $5 000 який доставить 50кг тротилу до кораблика-геноцидника, або понтонної переправи...</div>
-            <h2>Корабель підводний камікадзе-3</h2>
-            <div>Простий і дешевий підводний плав-засіб з надводною камерою і інтернетом старлінк $5 000 - $6 000 який доставить 100кг тротилу до понтонної переправи...</div>
-        </div>
-
-        <div id="sect_mini_car">
-            <h2>Міні машина камікадзе</h2>
-            <div>Машинка розміром до 1 метра. Комплект: 20 камікадзе(одноразові), 2 ретранслятори інтернету, 5 з автоматами, 5 з снайперками. Переваги: на відміну від дронів може знаходитись на позіції днями.</div>
-        </div>
-        
-        <div id="sect_sosh">
-            <h2>СОШ з бронею</h2>
-            <div>СОШ з бронею і глушником - підвищує: точність стрільби, захищеність стрілка. Тільки для стаціонарного бою. $120</div>
-            
-            <img src="СОШ.png" alt=""></img>
-        </div>
-
-        <div id="sect_detonator">
-            <h2>Детонатор-1</h2>
-            <div>Зробленний на бізі "Ардуіно-міні" $30-$40. Функції: кнопки +1мин, +10мин, +1час, reset, а також світлові індикатори. Додаткові режими підриву: вібрація, світло, розтяжка.</div>
-            <h2>Детонатор-2</h2>
-            <div>Зробленний на бізі "Ардуіно-міні" $50-$60. Функції: кнопки +1мин, +10мин, +1час, reset, а також світлові індикатори. Також можливо привести в дію на відстані до 2км. Додаткові режими підриву: вібрація, світло, розтяжка.</div>
-            <h2>Детонатор-3</h2>
-            <div>Зробленний на бізі "Ардуіно з камерою" $50-$60. Функції: кнопки +1мин, +10мин, +1час, reset, а також світлові індикатори. Можливість підключитись по wi-fi до камери(до 80м) і привести в дію віддаленно. Додаткові режими підриву: вібрація, світло, розтяжка.</div>
-            <h2>Детонатор-універсал</h2>
-            <div>Зробленний на бізі "Ардуіно з камерою" + пульт $60-$70. Функції: кнопки +1мин, +10мин, +1час, reset, а також світлові індикатори. Можливість підключитись по wi-fi до камери(до 80м) і привести в дію віддаленно. Також можливо привести в дію на відстані
-                до 2км. Додаткові режими підриву: вібрація, світло, розтяжка.</div>
-
-        </div>
-
-    </section>
-
-    <section id="sect_news">
-        Сьогодні страна терорист празнує збиття більше 1 000 байрактарів. Ну хай веселяться, тільки не говоріть що вони потратили ракет вартістю $230 000 000 000 щоб збивати пустишки по $3 000. Тепер наші справжні Байрактари літають без проблем, бо в окупантів
-        ракети для ПВО закінчились. Тепер С-300 не будуть стрілять по наших городах!
-    </section>
-</body>
-<script>
-    function show(param) {
-        document.getElementById("sect_war").style.display = "none";
-        document.getElementById("sect_news").style.display = "none";
-        document.getElementById("sect_news").style.display = "none";
-        document.getElementById("sect_turel").style.display = "none";
-        document.getElementById("sect_drone").style.display = "none";
-        document.getElementById("sect_tank").style.display = "none";
-        document.getElementById("sect_mini_car").style.display = "none";
-        document.getElementById("sect_sosh").style.display = "none";
-        document.getElementById("sect_kor").style.display = "none";
-        document.getElementById("sect_detonator").style.display = "none";
-        if (param == 1) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_turel").style.display = "block";
-        }
-        if (param == 2) {
-            document.getElementById("sect_news").style.display = "block";
-        }
-        if (param == 3) {
-            document.getElementById("sect_news").style.display = "block";
-        }
-        if (param == 5) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_turel").style.display = "block";
-        }
-        if (param == 6) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_drone").style.display = "block";
-        }
-        if (param == 7) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_tank").style.display = "block";
-        }
-        if (param == 8) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_mini_car").style.display = "block";
-        }
-        if (param == 9) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_kor").style.display = "block";
-        }
-        if (param == 10) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_detonator").style.display = "block";
-        }
-        if (param == 11) {
-            document.getElementById("sect_war").style.display = "block";
-            document.getElementById("sect_sosh").style.display = "block";
-        }
-    }
-    show(5);
-</script>
-
-</html>
+    </header>
+   
+        <h1>BIKINI</h1> 
+        <h2>Women</h2> 
+        <div class="product-grid"><a class="product-card" href="product-1.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/woomen/bikini/b/1.jpg" alt="Чорний купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/woomen/bikini/b/2.jpg" alt="Чорний купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Чорний купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$29.99</span>
+        <span class="product-card__art">art: 1</span>
+    </span>
+</a><a class="product-card" href="product-2.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/woomen/bikini/b2/1.webp" alt="Синій купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/woomen/bikini/b2/2.webp" alt="Синій купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Синій купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$49.99</span>
+        <span class="product-card__art">art: 2</span>
+    </span>
+</a><a class="product-card" href="product-3.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/woomen/bikini/r/1.webp" alt="Червоний купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/woomen/bikini/r/2.webp" alt="Червоний купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Червоний купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$89.99</span>
+        <span class="product-card__art">art: 3</span>
+    </span>
+</a></div>
+        <h2>Children</h2> 
+        <div class="product-grid"><a class="product-card" href="product-4.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/kids/blue/1.webp" alt="Синій дитячий купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/kids/blue/2.webp" alt="Синій дитячий купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Синій дитячий купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$29.99</span>
+        <span class="product-card__art">art: 4</span>
+    </span>
+</a><a class="product-card" href="product-5.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/kids/blu/1.webp" alt="Блакитний дитячий купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/kids/blu/2.webp" alt="Блакитний дитячий купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Блакитний дитячий купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$49.99</span>
+        <span class="product-card__art">art: 5</span>
+    </span>
+</a><a class="product-card" href="product-6.html">
+    <span class="product-card__images">
+        <img class="product-card__image" src="img/kids/r/1.webp" alt="Червоний дитячий купальник" loading="lazy">
+        <img class="product-card__image product-card__image--hover" src="img/kids/r/2.webp" alt="Червоний дитячий купальник" loading="lazy">
+    </span>
+    <span class="product-card__name">Червоний дитячий купальник</span>
+    <span class="product-card__meta">
+        <span class="product-card__price">$89.99</span>
+        <span class="product-card__art">art: 6</span>
+    </span>
+</a></div>
+        </body>
+        </html>
